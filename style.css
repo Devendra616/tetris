@@ -8,6 +8,9 @@
 
 .grid div {
     height: 20px;
-    width: 20px;
-    background-color: red;
+    width: 20px;    
+}
+
+.tetromino {
+    background-color: rgb(0, 60, 255);
 }
