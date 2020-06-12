@@ -97,7 +97,84 @@ document.addEventListener('DOMContentLoaded',()=> {
         }
     }
 
-    
+    // move the tetromino one place to left if available
+    function moveLeft() {
+        undraw();
+        // check left boundry
+        const isAtLeftEdge = currentTetromino.some(index => {
+            return (currentPosition + index) % GRID_WIDTH === 0;
+        });
 
+        if(!isAtLeftEdge) {
+            currentPosition -=1;
+        }
+
+        // if already some other tetromino colliding revert
+        const isColliding = currentTetromino.some(index => {
+            return squares[currentPosition + index].classList.contains('taken');
+        })
+        if(isColliding) {
+            currentPosition +=1;
+        }
+        draw();
+    }
+    // move the tetromino one place to right if available
+    function moveRight() {
+        undraw();
+        // check left boundry
+        const isAtRightEdge = currentTetromino.some(index => {
+            return (currentPosition + index) % GRID_WIDTH === (GRID_WIDTH-1);
+        });
+
+        if(!isAtRightEdge) {
+            currentPosition +=1;
+        }
+        // if already some other tetromino colliding revert
+        const isColliding = currentTetromino.some(index => {
+            return squares[currentPosition + index].classList.contains('taken');
+        });console.log(isColliding)
+        if(isColliding) {
+            currentPosition -=1;
+        }
+        draw();
+    }
+
+    function rotate() {
+        undraw();
+        currentRotation++;
+        // when reached at end of rotations start from begining
+        if(currentRotation === currentTetromino.length) {
+            currentRotation = 0;
+        }
+        console.log(currentRotation)
+        currentTetromino = theTetrominoes[random][currentRotation];
+        draw();
+    }
+
+    // assing functions to keycodesconsole
+    function control(e) {
+        switch (e.keyCode) { 
+            // left arrow or A move left
+            case 65 : 
+            case 37 : moveLeft();
+                      break;
+            // right arrow or D move right                      
+            case 39:
+            case 68: moveRight();
+                    break;
+             // Down arrow or X moves down                   
+            case 88: 
+            case 40: moveDown();
+                    break;
+            // Up arrow or W rotates 
+            case 87:
+            case 38: rotate();
+                    break;
+
+
+        }
+    }
+    // arrow keys are triggered by keydown/keyup not by keypress
+    document.addEventListener('keydown',control);
    
 })
