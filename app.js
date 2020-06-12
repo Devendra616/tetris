@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded',()=> {
     const startBtn= document.querySelector('#start-button');
     const GRID_WIDTH = 10;
     let nextRandom = 0;
+    let timerId;
      //The Tetrominoes
     const lTetromino = [
         [1, GRID_WIDTH + 1, GRID_WIDTH * 2 + 1, 2],
@@ -61,7 +62,7 @@ document.addEventListener('DOMContentLoaded',()=> {
     }
 
     // make the tetromino move down every second
-    timerId = setInterval(moveDown,1000);
+    //timerId = setInterval(moveDown,1000);
    
     function moveDown() {
         undraw();
@@ -75,7 +76,7 @@ document.addEventListener('DOMContentLoaded',()=> {
         //  Randomly select a tetromino and its rotation
         random = nextRandom;
         nextRandom = Math.floor(Math.random()*theTetrominoes.length);
-        console.log('nextRandom',nextRandom)
+       
         currentTetromino = theTetrominoes[random][currentRotation];
         currentPosition = 4;
         
@@ -202,8 +203,21 @@ document.addEventListener('DOMContentLoaded',()=> {
         nextTetrominos[nextRandom].forEach( index => {
             displaySquares[index + displayIndex].classList.add('tetromino')
         });
-        console.log('nextr',nextRandom);
-        console.log('displi',displayIndex);
-        
+           
     }
+
+    // start/pause button
+    startBtn.addEventListener('click', ()=> {
+        // if already running, pause moving down
+        if(timerId) {
+            clearInterval(timerId);
+            timerId = null;
+        } else {
+            //start moving down
+            draw();
+            timerId = setInterval(moveDown, 1000);
+            //nextRandom = Math.floor(Math.random()* theTetrominoes.length);
+            displayNextTetromino();
+        }
+    })
 })
