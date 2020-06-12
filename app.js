@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded',()=> {
     const scoreDisplay = document.querySelector('#score');
     const startBtn= document.querySelector('#start-button');
     const GRID_WIDTH = 10;
+    let nextRandom = 0;
      //The Tetrominoes
     const lTetromino = [
         [1, GRID_WIDTH + 1, GRID_WIDTH * 2 + 1, 2],
@@ -43,10 +44,8 @@ document.addEventListener('DOMContentLoaded',()=> {
   const theTetrominoes = [lTetromino, zTetromino, tTetromino, oTetromino, iTetromino];
   let currentPosition = 4;
   let currentRotation = 0;
+  let currentTetromino = theTetrominoes[0][0];
 
-//  Randomly select a tetromino and its rotation
-    let random = Math.floor(Math.random()*theTetrominoes.length);
-    let currentTetromino = theTetrominoes[random][currentRotation];
 
     // draw the first rotation in tetromino
     function draw() {
@@ -73,11 +72,15 @@ document.addEventListener('DOMContentLoaded',()=> {
     
     // Start a new tetromino falling
     function startNewTetromino() {
-        let random = Math.floor((Math.random() * theTetrominoes.length));
+        //  Randomly select a tetromino and its rotation
+        random = nextRandom;
+        nextRandom = Math.floor(Math.random()*theTetrominoes.length);
+        console.log('nextRandom',nextRandom)
         currentTetromino = theTetrominoes[random][currentRotation];
         currentPosition = 4;
-        draw();
         
+        draw();
+        displayNextTetromino();
     }
 
     function isNextDownPositionIsTaken(curIndex) {      
@@ -170,11 +173,37 @@ document.addEventListener('DOMContentLoaded',()=> {
             case 87:
             case 38: rotate();
                     break;
-
-
         }
     }
     // arrow keys are triggered by keydown/keyup not by keypress
     document.addEventListener('keydown',control);
    
+
+    // show next Tetromino in mini grid
+    const displaySquares = document.querySelectorAll('.mini-grid div');
+    const DISPLAY_WIDTH = 4;
+    let displayIndex = 0;
+
+    // Tetrominos without rotations so first indexes only
+    const nextTetrominos = [
+        [1, DISPLAY_WIDTH + 1, DISPLAY_WIDTH * 2 + 1, 2], //lTetromino
+        [0, DISPLAY_WIDTH, DISPLAY_WIDTH + 1, DISPLAY_WIDTH * 2 + 1], //zTetromino
+        [1, DISPLAY_WIDTH, DISPLAY_WIDTH + 1, DISPLAY_WIDTH + 2], //tTetromino
+        [0, 1, DISPLAY_WIDTH, DISPLAY_WIDTH + 1], //oTetromino
+        [1, DISPLAY_WIDTH + 1, DISPLAY_WIDTH * 2 + 1, DISPLAY_WIDTH * 3 + 1], //iTetromino
+    ];
+
+    // display shape in mini-grid display
+    function displayNextTetromino() {
+        // remove any tetromino from display grid
+        displaySquares.forEach(square => {
+            square.classList.remove('tetromino');
+        });
+        nextTetrominos[nextRandom].forEach( index => {
+            displaySquares[index + displayIndex].classList.add('tetromino')
+        });
+        console.log('nextr',nextRandom);
+        console.log('displi',displayIndex);
+        
+    }
 })
