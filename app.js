@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded',()=> {
     let random = 0;
     let timerId;
     let score = 0;
+    const colors = ['red','orange', 'green','pink','cyan'];
      //The Tetrominoes
     const lTetromino = [
         [1, GRID_WIDTH + 1, GRID_WIDTH * 2 + 1, 2],
@@ -55,12 +56,14 @@ document.addEventListener('DOMContentLoaded',()=> {
     function draw() {
         currentTetromino.forEach(index => {
             squares[currentPosition+ index].classList.add('tetromino');
+            squares[currentPosition+ index].style.backgroundColor = colors[random];
         })
     }
     // undraw tetromino
     function undraw() {
         currentTetromino.forEach(index => {
             squares[currentPosition+ index].classList.remove('tetromino');
+            squares[currentPosition+ index].style.backgroundColor = '';
         })
     }
 
@@ -149,15 +152,27 @@ document.addEventListener('DOMContentLoaded',()=> {
     }
 
     function rotate() {
-        undraw();
+        let tempTetromino;
+                          
         currentRotation++;
         // when reached at end of rotations start from begining
         if(currentRotation === currentTetromino.length) {
             currentRotation = 0;
+        }      
+        tempTetromino = theTetrominoes[random][currentRotation];   
+        //  check if on rotation, it collides with freezed ones
+        const isColliding = tempTetromino.some(index => squares[currentPosition+index].classList.contains('taken'));
+        // * Checks if at either edge
+        const isAtLeftEdge = tempTetromino.some(index => (currentPosition + index) % GRID_WIDTH === 0);
+        const isAtRightEdge = tempTetromino.some(index => (currentPosition + index) % GRID_WIDTH === (GRID_WIDTH - 1));
+        
+        if(!(isColliding||isAtLeftEdge||isAtRightEdge)) {
+            // do the changes
+            undraw();
+            currentTetromino = tempTetromino;
+            draw();
         }
-       
-        currentTetromino = theTetrominoes[random][currentRotation];
-        draw();
+        
     }
 
     // assing functions to keycodesconsole
@@ -204,9 +219,11 @@ document.addEventListener('DOMContentLoaded',()=> {
         // remove any tetromino from display grid
         displaySquares.forEach(square => {
             square.classList.remove('tetromino');
+            square.style.backgroundColor = '';
         });
         nextTetrominos[nextRandom].forEach( index => {
-            displaySquares[index + displayIndex].classList.add('tetromino')
+            displaySquares[index + displayIndex].classList.add('tetromino');
+            displaySquares[displayIndex + index].style.backgroundColor = colors[nextRandom];
         });
            
     }
@@ -238,7 +255,8 @@ document.addEventListener('DOMContentLoaded',()=> {
                 scoreDisplay.innerHTML = score;
                 row.forEach(index => {
                     squares[index].classList.remove('taken');
-                    squares[index].classList.remove('tetromino');                    
+                    squares[index].classList.remove('tetromino');
+                    squares[index].style.backgroundColor='';
                 });
                 const squaresRemoved = squares.splice(i,GRID_WIDTH);               
                 // add the removed squares to top
@@ -256,4 +274,26 @@ document.addEventListener('DOMContentLoaded',()=> {
             timerId = null;
         }
     }
-})
+}) ;
+
+
+/* 
+    * INDEX explained:
+    width = 10
+    [1, width+1, width*2+1, 2]
+
+    after factoring in width:
+    =[01, 11, 21, 02]
+
+    taking those numbers as x and y values:
+    =[(0, 1), (1, 1), (2, 1), (0, 2)]
+
+    the x and y values indicate which box to colour.
+
+    [0,0]  [0,1]  [0,2]
+    [1,0]  [1,1]  [1,2]
+    [2,0]  [2,1]  [2,2]
+
+
+
+*/
