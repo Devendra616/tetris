@@ -4,12 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Basic Tetris Game</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <!-- Add icon library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h3>Score: <span id='score'>0</span></h3>
-    <button id="start-button">Start/Pause</button>
+    <video id="videoBG" poster="poster.JPG" muted loop>
+        <source src="https://res.cloudinary.com/nmdc/video/upload/v1592551404/codepen/background.mp4" type="video/mp4">
+    </video>   
     <div class="container">
+        <div class="box">
+            <div class="game-over">GAME OVER</div>
         <div class="grid">
             <div></div>
             <div></div>
@@ -223,6 +229,15 @@
             <div class="taken"></div>
             <div class="taken"></div>
         </div>
+        <div class="rightSideBar">
+        <div>
+            <h3>Score: <span id='score'>0</span></h3>
+        </div>
+        <div>                       
+            <button type="button" class="btn btn-primary fa fa-play" data-toggle="button" aria-pressed="false" data-text-swap='Pause' data-text-original="Play">
+                Start
+            </button>
+        </div>
         <div class="mini-grid">
             <div></div>
             <div></div>
@@ -241,7 +256,28 @@
             <div></div>
             <div></div>
         </div>
+        <div class='controls-container'>
+            <p>Controls:</p>
+           
+            <p><span class="badge badge-pill badge-warning fa fa-arrow-circle-up"> Rotate</span></p>
+            <p><span class="badge badge-pill badge-warning fa fa-arrow-circle-left"> Move Left</span></p>
+            <p><span class="badge badge-pill badge-warning fa fa-arrow-circle-right"> Move Right</span></p>
+            <p><span class="badge badge-pill badge-warning fa fa-arrow-circle-down"> Move Down Faster</span></p>
+                        
+        </div>
     </div>
+      </div>
+    </div>
+    <svg>
+        <filter id='wavy'>
+            <feTurbulence x='0' y='0' baseFrequency="0.02"
+                 numOctaves="5" seed="2">
+                 <animate attributeName="baseFrequency" dur="60s" values="0.02;0.03;0.02" repeatCount="indefinite" />
+            </feTurbulence>
+            <feDisplacementMap in="SourceGraphic" scale="30" />
+        </filter>
+    </svg>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="app.js" />
 </body>
 </html>
