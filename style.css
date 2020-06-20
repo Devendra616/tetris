@@ -181,3 +181,16 @@ button {
 .controls-container .badge{
     font-size: 15px;
 }
+
+.banner{
+    display: flex;
+    align-content: flex-start;
+    width: 10px;
+    position: absolute;
+    top:20px;
+    left:20px;
+}
+
+.banner img{
+    width: 150px;;
+}
